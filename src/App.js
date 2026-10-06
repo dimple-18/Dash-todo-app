@@ -6,7 +6,6 @@ import Calender from './components/Calender';
 import Projects from './components/Projects';
 import Main from './components/Main';
 import Todos from './components/Todos';
-import EditTodo from './components/EditTodo';
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
       </Sidebar>
       <Main>
           <Todos />
-          {/* <EditTodo /> */}
       </Main>
     </div>
   );

@@ -3,6 +3,7 @@ import { Pencil, XCircle } from "react-bootstrap-icons";
 import RenameProject from "./RenameProject";
 import Modal from "./Modal";
 import { TodoContext } from "../context";
+import { projectColor } from "../constants";
 import { db } from "../firebase";
 import {
   doc,
@@ -47,8 +48,16 @@ function Project({ project, edit }) {
   };
 
   return (
-    <div className="Project">
+    <div
+      className={`Project ${selectedProject === project.name ? "active" : ""}`}
+    >
       <div className="name" onClick={() => setSelectedProject(project.name)}>
+        <span
+          className="dot"
+          style={{
+            background: projectColor(project.name),
+          }}
+        />
         {project.name}
       </div>
       <div className="btns">

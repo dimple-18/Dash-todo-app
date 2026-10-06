@@ -11,6 +11,8 @@ const firebaseConfig = {
   appId: "YOUR_APP_ID",
 };
 
+export const isFirebaseConfigured = !firebaseConfig.apiKey.startsWith("YOUR_");
+
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);

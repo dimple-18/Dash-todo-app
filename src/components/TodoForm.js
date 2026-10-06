@@ -5,6 +5,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
+const pickerSlotProps = { textField: { size: "small", fullWidth: true } };
+
 function TodoForm({
   handleSubmit,
   heading = false,
@@ -23,85 +25,99 @@ function TodoForm({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit} className="TodoForm">
-        <div className="text">
-          {heading && <h3>{heading}</h3>}
-          <input
-            type="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Todo ..."
-            autoFocus
-          />
+        <div className="form-header">
+          <h3>{heading || "Edit todo"}</h3>
+          {showButtons && (
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => setShowModal(false)}
+              aria-label="Close"
+            >
+              <X size="22" />
+            </button>
+          )}
         </div>
+
+        <input
+          className="todo-input"
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What do you need to do?"
+          autoFocus
+        />
 
         {/* Reminder section */}
-        <div className="remind">
-          <Bell />
-          <p>Remind Me</p>
+        <div className="section-label">
+          <Bell size="14" />
+          <p>Remind me</p>
         </div>
 
-        {/* Pick day */}
-        <div className="pick-day">
-          <div className="title">
-            <CalendarDay />
-            <p>Choose a day</p>
+        <div className="pickers">
+          <div className="picker">
+            <div className="title">
+              <CalendarDay size="13" />
+              <p>Day</p>
+            </div>
+            <DatePicker
+              value={day || dayjs()}
+              onChange={(newValue) => setDay(newValue || dayjs())}
+              slotProps={pickerSlotProps}
+            />
           </div>
-          <DatePicker
-            label="Pick a day"
-            value={day || dayjs()}
-            onChange={(newValue) => setDay(newValue || dayjs())}
-          />
-        </div>
 
-        {/* Pick time */}
-        <div className="pick-time">
-          <div className="title">
-            <Clock />
-            <p>Choose a time</p>
+          <div className="picker">
+            <div className="title">
+              <Clock size="13" />
+              <p>Time</p>
+            </div>
+            <TimePicker
+              value={time || dayjs()} 
+              onChange={(newValue) => setTime(newValue || dayjs())}
+              slotProps={pickerSlotProps}
+            />
           </div>
-          <TimePicker
-            label="Pick a time"
-            value={time || dayjs()} 
-            onChange={(newValue) => setTime(newValue || dayjs())}
-          />
         </div>
 
         {/* Pick project */}
-        <div className="pick-project">
-          <div className="title">
-            <Palette />
-            <p>Choose Project</p>
-          </div>
-          <div className="projects">
-            {projects.length > 0 ? (
-              projects.map((project) => (
-                <div
-                  key={project.id}
-                  className={`project ${
-                    todoProject === project.name ? "active" : ""
-                  }`}
-                  onClick={() => setTodoProject(project.name)}
-                >
-                  {project.name}
-                </div>
-              ))
-            ) : (
-              <div style={{ color: "#ff0000" }}>
-                Please add a project before proceeding
+        <div className="section-label">
+          <Palette size="14" />
+          <p>Project</p>
+        </div>
+        <div className="projects">
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <div
+                key={project.id}
+                className={`project ${
+                  todoProject === project.name ? "active" : ""
+                }`}
+                onClick={() => setTodoProject(project.name)}
+              >
+                {project.name}
               </div>
-            )}
-          </div>
+            ))
+          ) : (
+            <div className="no-projects">
+              Please add a project before proceeding
+            </div>
+          )}
         </div>
 
         {/* Action buttons */}
         {showButtons && (
-          <div className="actions">
-            <div className="cancel" onClick={() => setShowModal(false)}>
-              <X size="40" />
-            </div>
-            <div className="confirm">
-              <button type="submit">+ Add Todo</button>
-            </div>
+          <div className="form-footer">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              + Add Todo
+            </button>
           </div>
         )}
       </form>

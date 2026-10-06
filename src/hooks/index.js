@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { db } from "../firebase";  // import Firestore instance
+import { db, isFirebaseConfigured } from "../firebase";  // import Firestore instance
 import { collection, onSnapshot } from "firebase/firestore";
 import moment from "moment";
+import { sampleProjects, sampleTodos } from "../constants";
 
 export function useTodos() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(isFirebaseConfigured ? [] : sampleTodos);
 
   useEffect(() => {
+    if (!isFirebaseConfigured) return;
+
     const unsubscribe = onSnapshot(collection(db, "todos"), (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -38,7 +41,7 @@ export function useFilterTodos(todos, selectedProject) {
         const diffDays = todoDate.diff(todayDate, "days");
         return diffDays >= 0 && diffDays < 7;
       });
-    } else if (selectedProject === "alldays") {
+    } else if (selectedProject === "all days") {
       data = todos;
     } else {
       data = todos.filter((todo) => todo.projectName === selectedProject);
@@ -59,6 +62,16 @@ export function useProjects(todos) {
   }
 
   useEffect(() => {
+    if (!isFirebaseConfigured) {
+      setProjects(
+        sampleProjects.map((project) => ({
+          ...project,
+          numOfTodos: calculateNumOfTodos(project.name, todos),
+        }))
+      );
+      return;
+    }
+
     const unsubscribe = onSnapshot(collection(db, "projects"), (snapshot) => {
       const data = snapshot.docs.map((doc) => {
         const projectName = doc.data().name;

@@ -1,4 +1,5 @@
 import React from "react";
+import { X } from "react-bootstrap-icons";
 
 function ProjectForm({
   handleSubmit,
@@ -16,20 +17,27 @@ function ProjectForm({
 
   return (
     <form onSubmit={handleSubmit} className="ProjectForm">
-      <h3>{heading}</h3>
+      <div className="form-header">
+        <h3>{heading}</h3>
+        <button className="icon-btn" type="button" onClick={handleCancel} aria-label="Close">
+          <X size="22" />
+        </button>
+      </div>
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
         type="text"
-        placeholder="project name . . ."
+        placeholder="Project name"
         autoFocus
       />
-      <button className="cancel" type="button" onClick={handleCancel}>
-        cancel
-      </button>
-      <button className="confirm" type="submit" disabled={!value?.trim()}>
-        {confirmButtonText}
-      </button>
+      <div className="form-footer">
+        <button className="btn-secondary" type="button" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-primary" type="submit" disabled={!value?.trim()}>
+          {confirmButtonText}
+        </button>
+      </div>
     </form>
   );
 }

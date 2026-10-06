@@ -68,7 +68,7 @@ function AddNewTodo() {
       <Modal onClose={() => setShowModal(false)}>
         <TodoForm
           handleSubmit={handleSubmit}
-          heading="Add new to do!"
+          heading="New todo"
           text={text}
           setText={setText}
           day={day}

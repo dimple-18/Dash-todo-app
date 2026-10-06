@@ -71,7 +71,8 @@ function RenameProject({ project, setShowModal }) {
         value={newProjectName}
         setValue={setNewProjectName}
         setShowModal={setShowModal}
-        confirmButtonText={"Confirm"}
+        confirmButtonText={"Save"}
+        onClose={() => setShowModal(false)}
       />
     </div>
   );

@@ -2,13 +2,12 @@ import React, { useContext, useState } from "react";
 import Project from "./Project";
 import AddNewProject from "./AddNewProject";
 import { CaretUp, Palette, PencilFill } from "react-bootstrap-icons";
-import { projectItems } from "../constants";
 import { TodoContext } from "../context";
 
 function Projects() {
   const [showMenu, setShowMenu] = useState(true);
   const [edit, setEdit] = useState(false);
-  const pencilColor = edit ? "#1EC94C" : "#000000";
+  const pencilColor = edit ? "#1EC94C" : "currentColor";
 
   //CONTEXT
   const { projects } = useContext(TodoContext)
@@ -16,19 +15,15 @@ function Projects() {
   return (
     <div className="Projects">
       <div className="header">
-        {/* LEFT SIDE → Title + List */}
-        <div className="left">
-          <div className="title">
-            <Palette size="18" />
-            <p>Projects</p>
-          </div>
+        <div className="title">
+          <Palette size="16" />
+          <p>Projects</p>
         </div>
 
-        {/* RIGHT SIDE → Buttons */}
         <div className="btns">
-          {showMenu && projectItems.length > 0 && (
+          {showMenu && projects.length > 0 && (
             <span className="edit" onClick={() => setEdit((edit) => !edit)}>
-              <PencilFill size="15" color={pencilColor} />
+              <PencilFill size="13" color={pencilColor} />
             </span>
           )}
           <AddNewProject />
@@ -37,7 +32,7 @@ function Projects() {
             onClick={() => setShowMenu((prev) => !prev)}
           >
             <CaretUp
-              size="20"
+              size="16"
               style={{
                 transform: showMenu ? "rotate(0deg)" : "rotate(180deg)",
                 transition: "0.2s ease"
@@ -47,16 +42,19 @@ function Projects() {
         </div>
       </div>
 
-      {/* Project List */}
       {showMenu && (
         <div className="items">
-          {projectItems.map((project) => (
-            <Project
-              project={project} // ✅ only one item
-              key={project.id}
-              edit={edit}
-            />
-          ))}
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <Project
+                project={project}
+                key={project.id}
+                edit={edit}
+              />
+            ))
+          ) : (
+            <p className="empty">No projects yet. Click + to add one.</p>
+          )}
         </div>
       )}
     </div>
